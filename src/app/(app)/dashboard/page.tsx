@@ -114,7 +114,7 @@ export default function DashboardPage() {
              <div className="flex items-start gap-4">
                <Clock className="mt-1 h-5 w-5 flex-shrink-0 text-muted-foreground"/>
                <div>
-                  <p>Job #1024 marked as <Badge variant="secondary">Completed</Badge> by Mike Johnson.</p>
+                  <div>Job #1024 marked as <Badge variant="secondary">Completed</Badge> by Mike Johnson.</div>
                   <p className="text-sm text-muted-foreground">2 hours ago</p>
                </div>
              </div>
