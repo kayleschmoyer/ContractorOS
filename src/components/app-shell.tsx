@@ -1,8 +1,9 @@
+
 "use client";
 
 import * as React from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
   Sidebar,
   SidebarHeader,
@@ -27,7 +28,6 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   Briefcase,
   Calendar,
-  CircleUser,
   CreditCard,
   FileText,
   LayoutDashboard,
@@ -35,8 +35,10 @@ import {
   Settings,
   Users,
   Warehouse,
+  LogOut
 } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { useAuth } from "@/hooks/use-auth";
+
 
 const navItems = [
   { href: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
@@ -74,31 +76,44 @@ function ContractorOSLogo() {
 }
 
 function UserMenu() {
+  const { user, customClaims, signOut } = useAuth();
+  const router = useRouter();
+
+  const handleSignOut = async () => {
+    await signOut();
+    router.push('/login');
+  }
+
+  if (!user) return null;
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="relative h-10 w-10 rounded-full">
           <Avatar className="h-10 w-10 border">
-            <AvatarImage src="https://picsum.photos/100" alt="User" data-ai-hint="user avatar"/>
-            <AvatarFallback>U</AvatarFallback>
+            <AvatarImage src={user.photoURL || "https://picsum.photos/100"} alt={user.displayName || user.email || 'User'} data-ai-hint="user avatar"/>
+            <AvatarFallback>{user.email?.charAt(0).toUpperCase()}</AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56" align="end" forceMount>
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium leading-none">Demo User</p>
+            <p className="text-sm font-medium leading-none">{user.displayName || user.email}</p>
             <p className="text-xs leading-none text-muted-foreground">
-              user@example.com
+              {customClaims?.role} on {customClaims?.companyId}
             </p>
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem>Profile</DropdownMenuItem>
         <DropdownMenuItem>Billing</DropdownMenuItem>
-        <DropdownMenuItem>Settings</DropdownMenuItem>
+        <DropdownMenuItem asChild><Link href="/settings">Settings</Link></DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>Log out</DropdownMenuItem>
+        <DropdownMenuItem onClick={handleSignOut}>
+            <LogOut className="mr-2 h-4 w-4" />
+            <span>Log out</span>
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
@@ -127,6 +142,23 @@ function MainNav() {
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const { user, isLoading } = useAuth();
+
+  if (isLoading) {
+    return (
+        <div className="flex items-center justify-center h-screen">
+            <div className="text-lg">Loading...</div>
+        </div>
+    )
+  }
+
+  if (!user && !pathname.startsWith('/login') && !pathname.startsWith('/accept-invite')) {
+    if (typeof window !== 'undefined') {
+        const router = require('next/navigation').useRouter();
+        router.push('/login');
+    }
+    return null;
+  }
 
   return (
     <SidebarProvider>
