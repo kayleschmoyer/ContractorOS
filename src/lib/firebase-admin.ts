@@ -1,15 +1,20 @@
 
 // src/lib/firebase-admin.ts
-import * as admin from 'firebase-admin';
+import { getApps, initializeApp } from 'firebase-admin/app';
 import { getFirestore, Timestamp } from 'firebase-admin/firestore';
 
-if (!admin.apps.length) {
-  admin.initializeApp();
+// Initialize Firebase Admin using the modular API so the same app instance
+// is shared across all admin subpackages. Importing from "firebase-admin" and
+// "firebase-admin/*" mixed was causing the default app to be undefined, which
+// resulted in runtime errors like "Cannot read properties of undefined
+// (reading 'INTERNAL')" when calling getFirestore.
+if (!getApps().length) {
+  initializeApp();
 }
 
 const db = getFirestore();
 
-export { admin, db, Timestamp };
+export { db, Timestamp };
 
 
 export type Metric = {
