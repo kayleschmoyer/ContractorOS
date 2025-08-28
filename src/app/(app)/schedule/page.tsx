@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Wand2, ChevronLeft, ChevronRight } from "lucide-react";
 import AiSuggestionForm from "./ai-suggestion-form";
+import Image from "next/image";
 
 const techs = [
   { id: "tech_1", name: "Mike L.", avatar: "https://picsum.photos/id/1005/50/50" },
@@ -56,7 +57,7 @@ export default function SchedulePage() {
           <div className="row-start-2 pr-4 text-right">
              {techs.map(tech => (
                  <div key={tech.id} className="h-32 flex flex-col items-center justify-center border-r">
-                     <img src={tech.avatar} alt={tech.name} className="h-12 w-12 rounded-full mb-1" data-ai-hint="user avatar"/>
+                       <Image src={tech.avatar} alt={tech.name} className="h-12 w-12 rounded-full mb-1" data-ai-hint="user avatar" width={48} height={48} />
                      <p className="font-medium text-sm">{tech.name}</p>
                  </div>
              ))}
