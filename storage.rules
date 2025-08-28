@@ -1,0 +1,25 @@
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    function isUserInCompany(companyId) {
+      return request.auth != null && request.auth.token.companyId == companyId;
+    }
+
+    // Secure job photos: only users within the same company can read/write
+    match /companies/{companyId}/jobs/{jobId}/photos/{allPaths=**} {
+      allow read, write: if isUserInCompany(companyId);
+    }
+
+    // Secure invoice PDFs: only users within the same company can read/write
+    match /companies/{companyId}/invoices/{invoiceId}.pdf {
+       allow read, write: if isUserInCompany(companyId);
+    }
+    
+    // Deny all other access
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}
