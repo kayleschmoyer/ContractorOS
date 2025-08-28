@@ -37,7 +37,7 @@ import {
   Warehouse,
   LogOut
 } from "lucide-react";
-import { useAuth } from "@/hooks/use-auth";
+import { useAuth } from "@/components/auth-provider";
 
 
 const navItems = [
