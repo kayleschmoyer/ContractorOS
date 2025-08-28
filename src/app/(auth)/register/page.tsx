@@ -19,17 +19,17 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { signin, googlePopup, friendlyError } from "@/lib/auth";
+import { signup, googlePopup, friendlyError } from "@/lib/auth";
 import Image from "next/image";
 
 const schema = z.object({
   email: z.string().email("Enter a valid email"),
-  password: z.string().min(1, "Password is required"),
+  password: z.string().min(8, "Password must be at least 8 characters"),
 });
 
 type FormValues = z.infer<typeof schema>;
 
-export default function LoginPage() {
+export default function RegisterPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
@@ -43,7 +43,7 @@ export default function LoginPage() {
     setLoading(true);
     setMessage(null);
     try {
-      const dest = await signin(data.email, data.password);
+      const dest = await signup(data.email, data.password);
       router.push(dest);
     } catch (e: any) {
       setMessage(friendlyError(e.code));
@@ -78,10 +78,10 @@ export default function LoginPage() {
         <CardHeader className="items-center text-center">
           <Logo className="mb-4" />
           <CardTitle className="font-headline text-2xl">
-            Welcome Back
+            Create an Account
           </CardTitle>
           <CardDescription className="text-muted-foreground">
-            Enter your credentials to access your dashboard.
+            Get started with ContractorOS today.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -100,15 +100,7 @@ export default function LoginPage() {
               )}
             </div>
             <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <Label htmlFor="password">Password</Label>
-                <Link
-                  href="/reset-password"
-                  className="text-sm text-primary/80 hover:text-primary"
-                >
-                  Forgot password?
-                </Link>
-              </div>
+              <Label htmlFor="password">Password</Label>
               <Input
                 id="password"
                 type="password"
@@ -122,19 +114,19 @@ export default function LoginPage() {
              {message && <div role="alert" className="text-sm text-destructive">{message}</div>}
             <div className="flex flex-col gap-4 pt-2">
                  <Button type="submit" className="w-full" disabled={loading}>
-                    {loading ? "Signing In..." : "Sign In"}
+                    {loading ? "Creating Account..." : "Sign Up"}
                 </Button>
                  <Button type="button" variant="outline" className="w-full" onClick={onGoogle} disabled={loading}>
-                    Sign In with Google
+                    Sign Up with Google
                 </Button>
             </div>
           </form>
         </CardContent>
         <CardFooter className="flex-col items-center gap-4 text-sm">
             <p>
-                Don&apos;t have an account?{" "}
-                <Link href="/register" className="font-semibold text-primary/90 hover:text-primary">
-                    Sign up
+                Already have an account?{" "}
+                <Link href="/login" className="font-semibold text-primary/90 hover:text-primary">
+                    Sign In
                 </Link>
             </p>
              <div className="flex gap-4 text-xs text-muted-foreground">

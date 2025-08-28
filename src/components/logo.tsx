@@ -28,7 +28,7 @@ export function Logo({ className }: LogoProps) {
           <path d="M9 15h6" />
         </svg>
       </div>
-      <span className="font-headline text-xl font-bold md:text-2xl">ContractorOS</span>
+      <span className="font-headline text-xl font-bold text-primary-foreground md:text-2xl">ContractorOS</span>
     </Link>
   );
 }
