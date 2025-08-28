@@ -18,8 +18,8 @@ import { Badge } from "@/components/ui/badge";
 import { Briefcase, Calendar, DollarSign, Users } from "lucide-react";
 import { getCompanyMetrics, getUpcomingJobs, getRecentActivity } from "@/lib/firebase-admin";
 import { format } from "date-fns";
-import { ChartContainer, ChartTooltip, ChartTooltipContent, ChartConfig } from "@/components/ui/chart"
-import { Bar, BarChart, XAxis, YAxis } from "recharts"
+import { ChartConfig } from "@/components/ui/chart"
+import { RevenueChart } from "./revenue-chart";
 
 
 async function DashboardPage() {
@@ -104,23 +104,7 @@ async function DashboardPage() {
             <CardDescription>Revenue from the last 7 days.</CardDescription>
           </CardHeader>
           <CardContent>
-            <ChartContainer config={chartConfig} className="h-64 w-full">
-              <BarChart accessibilityLayer data={chartData}>
-                <XAxis
-                  dataKey="date"
-                  tickLine={false}
-                  axisLine={false}
-                  tickMargin={8}
-                  tickFormatter={(value) => format(new Date(value), "MMM d")}
-                />
-                <YAxis hide/>
-                <ChartTooltip
-                  cursor={false}
-                  content={<ChartTooltipContent indicator="dot" />}
-                />
-                <Bar dataKey="revenue" fill="var(--color-revenue)" radius={4} />
-              </BarChart>
-            </ChartContainer>
+            <RevenueChart chartData={chartData} chartConfig={chartConfig} />
           </CardContent>
         </Card>
         <Card>
