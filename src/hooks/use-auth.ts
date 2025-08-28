@@ -31,12 +31,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setIsLoading(true);
       if (user) {
         setUser(user);
-        const tokenResult: IdTokenResult = await user.getIdTokenResult();
-        const claims = tokenResult.claims as CustomClaims;
-        setCustomClaims({
-            companyId: claims.companyId,
-            role: claims.role
-        });
+        try {
+            const tokenResult: IdTokenResult = await user.getIdTokenResult(true); // Force refresh
+            const claims = tokenResult.claims as CustomClaims;
+            setCustomClaims({
+                companyId: claims.companyId,
+                role: claims.role
+            });
+        } catch (error) {
+            console.error("Error getting user token:", error);
+            setCustomClaims(null);
+        }
       } else {
         setUser(null);
         setCustomClaims(null);
@@ -51,10 +56,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     await firebaseSignOut(auth);
   };
 
--  const value = { user, customClaims, isLoading, signOut };
+  const value = { user, customClaims, isLoading, signOut };
 
   return (
-    <AuthContext.Provider value={{ user, customClaims, isLoading, signOut }}>
+    <AuthContext.Provider value={value}>
       {children}
     </AuthContext.Provider>
   );
