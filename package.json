@@ -10,7 +10,8 @@
     "start": "next start",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
-    "seed": "tsx --tsconfig tsconfig.scripts.json scripts/seed.ts"
+    "seed": "tsx --tsconfig tsconfig.scripts.json scripts/seed.ts",
+    "postinstall": "patch-package"
   },
   "dependencies": {
     "@genkit-ai/googleai": "^1.14.1",
