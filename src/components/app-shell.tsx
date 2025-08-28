@@ -142,7 +142,14 @@ function MainNav() {
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const router = useRouter();
   const { user, isLoading } = useAuth();
+
+  React.useEffect(() => {
+    if (!isLoading && !user && !pathname.startsWith('/login') && !pathname.startsWith('/accept-invite')) {
+      router.push('/login');
+    }
+  }, [isLoading, user, pathname, router]);
 
   if (isLoading) {
     return (
@@ -151,13 +158,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         </div>
     )
   }
-
+  
   if (!user && !pathname.startsWith('/login') && !pathname.startsWith('/accept-invite')) {
-    if (typeof window !== 'undefined') {
-        const router = require('next/navigation').useRouter();
-        router.push('/login');
-    }
-    return null;
+    return null; // or a loading spinner
   }
 
   return (
