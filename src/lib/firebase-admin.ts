@@ -1,20 +1,16 @@
+
 // src/lib/firebase-admin.ts
 import * as admin from 'firebase-admin';
 import { getFirestore, Timestamp } from 'firebase-admin/firestore';
 
 if (!admin.apps.length) {
-  try {
-    admin.initializeApp({
-      // When running in Firebase Hosting, the SDK is automatically configured
-      // Use service account credentials locally
-      credential: process.env.GOOGLE_APPLICATION_CREDENTIALS ? admin.credential.applicationDefault() : undefined
-    });
-  } catch (e) {
-    console.error("Firebase Admin SDK initialization error", e);
-  }
+  admin.initializeApp();
 }
 
 const db = getFirestore();
+
+export { admin, db, Timestamp };
+
 
 export type Metric = {
     revenueLast7d: number;
