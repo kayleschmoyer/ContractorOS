@@ -1,0 +1,27 @@
+diff --git a/node_modules/firebase/package.json b/node_modules/firebase/package.json
+index 3254924..a4bc314 100644
+--- a/node_modules/firebase/package.json
++++ b/node_modules/firebase/package.json
+@@ -23,10 +23,7 @@
+   "browser": "dist/index.esm.js",
+   "main": "dist/index.cjs.js",
+   "react-native": "dist/index.rn.js",
+-  "exports": {
+-    "./app": "./app/dist/index.esm.js",
+-    "./app-compat": "./app-compat/dist/index.esm.js"
+-  },
++  "exports": null,
+   "files": [
+     "**/dist",
+     "**/package.json"
+diff --git a/node_modules/firebase/app/package.json b/node_modules/firebase/app/package.json
+index 4016a9a..5d41113 100644
+--- a/node_modules/firebase/app/package.json
++++ b/node_modules/firebase/app/package.json
+@@ -5,5 +5,5 @@
+   "browser": "dist/index.esm.js",
+   "main": "dist/index.cjs.js",
+   "react-native": "dist/index.rn.js",
+-  "typings": "dist/app/src/index.d.ts"
++  "typings": "dist/app/src/index.d.ts",
+ }
